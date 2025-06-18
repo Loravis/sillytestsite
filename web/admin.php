@@ -23,8 +23,8 @@
 
     // Handle logout
     if ($_POST && isset($_POST['logout'])) {
-    logout();
-}
+        logout();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -45,35 +45,53 @@
         ?>
         
         <?php if (!isLoggedIn()): ?>
-            <div class="container mt-4">
-                <div class="row">
-                    <div class="col-12">
-                         <div class="container">
-                            <h1>Admin Login</h1>
-                            
-                            <?php if ($error): ?>
-                                <div class="error"><?php echo $error; ?></div>
-                            <?php endif; ?>
-                            
-                            <form method="POST">
-                                <div class="form-group">
-                                    <label for="username">Username:</label>
-                                    <input type="text" id="username" name="username" required>
-                                </div>
+            <div class="container mt-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <h2 class="card-title mb-4 text-center">Admin Login</h2>
+
+                                <?php if ($error): ?>
+                                    <div class="alert alert-danger"><?php echo $error; ?></div>
+                                <?php endif; ?>
                                 
-                                <div class="form-group">
-                                    <label for="password">Password:</label>
-                                    <input type="password" id="password" name="password" required>
-                                </div>
-                                
-                                <button type="submit" name="login" class="btn">Login</button>
-                            </form>
+                                <form method="POST">
+                                    <div class="mb-3">
+                                        <label for="username" class="form-label">Username</label>
+                                        <input type="text" id="username" name="username" class="form-control" required>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">Password</label>
+                                        <input type="password" id="password" name="password" class="form-control" required>
+                                    </div>
+                                    
+                                    <button type="submit" name="login" class="btn btn-primary w-100">Login</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         <?php else: ?>
-           <p>Hello</p>
+            <div class="container mt-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-10">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <h2 class="card-title mb-4 text-center">Raumliste</h2>
+                                <div class="table-responsive">
+                                    <?php 
+                                        include 'roomstable.php';
+                                        create_table(); 
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         <?php endif; ?>
     </body>
 </html>

@@ -15,35 +15,22 @@
         echo create_header();
     ?>
     
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col-12">
-                <h2 class="mb-4">Raumliste</h2>
-                <?php create_table() ?>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h2 class="card-title mb-4 text-center">Raumliste</h2>
+                        <div class="table-responsive">
+                            <?php
+                                include 'roomstable.php'; 
+                                create_table();
+                            ?>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </body>
 </html>
-
-<?php
-    function create_table() {
-        require 'env.php';
-        require 'sql_config.php';
-
-        $result = mysqli_query($conn, "SELECT * FROM roomlist ORDER BY roomnr ASC");
-        
-        $table = "<table><tr>
-                            <th>Raumnummer</th>
-                            <th>Etage</th>
-                            <th>Kapazität</th>
-                        </tr>";
-        while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-            $table .= sprintf("<tr><td>%d</td><td>%d</td><td>%d</td>", $row["roomnr"], $row["floor"], $row["capacity"]);
-        }
-        $table .= "</table>";
-
-        echo $table;
-    }
-?>
-
