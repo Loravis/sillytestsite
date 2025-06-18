@@ -81,7 +81,7 @@
                                 <div class="table-responsive">
                                     <?php 
                                         include 'roomstable.php';
-                                        create_table(); 
+                                        echo create_admin_table(); 
                                     ?>
                                 </div>
                             </div>

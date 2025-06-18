@@ -24,7 +24,7 @@
                         <div class="table-responsive">
                             <?php
                                 include 'roomstable.php'; 
-                                create_table();
+                                echo create_table();
                             ?>
                         </div>
                     </div>
