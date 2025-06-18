@@ -1,27 +1,8 @@
 <?php
     session_start();
+    set_include_path('/var/www/phpincludes/rooms');
 
-    // TEMPORARY TESTING. To be removed at the nearest convenience!
-    define('ADMINUSER', 'admin');
-    define('ADMINPASS', '1234567');
-    define('LOGGEDIN', 'loggedin');    
-
-    function isLoggedIn() {
-        return isset($_SESSION[LOGGEDIN]) && $_SESSION[LOGGEDIN] === true;
-    }
-
-    function login($username, $password) {
-        if ($username === ADMINUSER && $password === ADMINPASS) {
-            $_SESSION[LOGGEDIN] = true;
-            return true;
-        } 
-
-        return false;
-    }
-
-    function logout() {
-        $_SESSION[LOGGEDIN] = false;
-    }
+    require_once "loginhandler.php";
 
     // Handle login
     $error = '';
@@ -41,7 +22,7 @@
     }
 
     // Handle logout
-    if ($_GET && isset($_GET['logout'])) {
+    if ($_POST && isset($_POST['logout'])) {
     logout();
 }
 ?>
@@ -92,9 +73,7 @@
                 </div>
             </div>
         <?php else: ?>
-            <form method="GET">
-                <button type="submit" name="logout" class="btn">Logout</button>
-            </form>
+           <p>Hello</p>
         <?php endif; ?>
     </body>
 </html>
