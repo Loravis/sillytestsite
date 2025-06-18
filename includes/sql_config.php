@@ -1,4 +1,5 @@
 <?php
+    require "env.php";
     $servername = "localhost";
     $sql_username = getenv('DB_USERNAME');
     $sql_password = getenv('DB_PASSWORD');
