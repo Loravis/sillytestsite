@@ -29,7 +29,7 @@
 <?php
     function create_table() {
         require 'env.php';
-        require_once 'sql_config.php';
+        require 'sql_config.php';
 
         $result = mysqli_query($conn, "SELECT * FROM roomlist ORDER BY roomnr ASC");
         

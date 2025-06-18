@@ -9,10 +9,10 @@
     if ($_POST && isset($_POST['login'])) {
         $username = $_POST['username'] ?? '';
         $password = $_POST['password'] ?? '';
-
-        echo $username;
-        echo $password;
         
+        error_log($username);
+        error_log($password);
+
         if (login($username, $password)) {
             header('Location: admin.php');
             exit;

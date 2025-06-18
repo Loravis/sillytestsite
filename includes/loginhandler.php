@@ -1,7 +1,4 @@
 <?php
-    // TEMPORARY TESTING. To be removed at the nearest convenience!
-    define('ADMINUSER', 'admin');
-    define('ADMINPASS', '1234567');
     define('LOGGEDIN', 'loggedin');    
 
     function isLoggedIn() {
@@ -9,7 +6,19 @@
     }
 
     function login($username, $password) {
-        if ($username === ADMINUSER && $password === ADMINPASS) {
+        set_include_path('/var/www/phpincludes/rooms');
+        require 'env.php';
+        require 'sql_config.php';
+
+        $sql = "SELECT * FROM admins WHERE username = \"" . $username . "\" AND passwd = \"" . $password . "\";";
+
+        error_log($sql);
+
+        $result = mysqli_query($conn, $sql);
+
+        $assoc = mysqli_fetch_assoc($result);
+
+        if ($assoc) {
             $_SESSION[LOGGEDIN] = true;
             return true;
         } 
