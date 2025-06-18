@@ -3,7 +3,7 @@ function create_header() {
     set_include_path("/var/www/phpincludes/rooms");
     require_once "loginhandler.php";
 
-    ob_start(); // Start output buffering
+    ob_start();
     ?>
     <header class="bg-dark">
         <nav class="navbar navbar-expand-lg navbar-dark">
@@ -51,7 +51,7 @@ function create_header() {
         </nav>
     </header>
     <?php
-    return ob_get_clean(); // Return the buffered content
+    return ob_get_clean();
 }
 ?>
 
