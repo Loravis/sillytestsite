@@ -12,8 +12,6 @@
 
         $sql = "SELECT * FROM admins WHERE username = \"" . $username . "\" AND passwd = \"" . $password . "\";";
 
-        error_log($sql);
-
         $result = mysqli_query($conn, $sql);
 
         $assoc = mysqli_fetch_assoc($result);
