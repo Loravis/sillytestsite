@@ -10,5 +10,3 @@ function setFormValues(button) {
     edit_form["edit_new_capacity"].value = capacity;
     return false;
 }
-
-// TODO: Implement server side edit handling
