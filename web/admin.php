@@ -33,13 +33,23 @@
 
     // Handle room addition
     if ($_POST && isset($_POST['save_add_room'])) {
-        try {
-            $sql = sprintf("INSERT INTO roomlist (roomnr, floor, capacity) VALUES (%d, %d, %d);", $_POST['add_new_roomnr'], $_POST['add_new_floor'], $_POST['add_new_capacity']);
-            $result = mysqli_query($conn, $sql);
-        } catch (mysqli_sql_exception) {
-            $error = sprintf("Ein Raum mit der Raumnummer %d existiert bereits. Der neue Raum wurde nicht hinzugefügt.", $_POST['add_new_roomnr']);
-        }
+        $stmt = $conn->prepare("INSERT INTO roomlist (roomnr, floor, capacity) VALUES (?, ?, ?)");
+
+        if ($stmt) {
+            try {
+                $stmt->bind_param("iii", $_POST['add_new_roomnr'], $_POST['add_new_floor'], $_POST['add_new_capacity']);
+                $stmt->execute();
+            } catch (mysqli_sql_exception $e) {
+                $error = sprintf(
+                    "Ein Raum mit der Raumnummer %d existiert bereits. Der neue Raum wurde nicht hinzugefügt.",
+                    $_POST['add_new_roomnr']
+                );
+            }
+        } else {
+            $error = sprintf("Ein interner SQL Fehler ist aufgetreten. Bitte kontaktieren Sie ihren Systemadministrator.");
     }
+}
+
 ?>
 
 <!DOCTYPE html>
