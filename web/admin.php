@@ -69,7 +69,6 @@
                 $stmt->bind_param("iiii", $roomnr, $floor, $capacity, $old_roomnr);
                 $stmt->execute();
             } catch (mysqli_sql_exception $e) {
-                error_log($e->getMessage());
                 $error = sprintf(
                     "Ein Raum mit der Raumnummer %d existiert bereits. Der neue Raum wurde nicht hinzugefügt.",
                     $_POST['edit_new_roomnr']
