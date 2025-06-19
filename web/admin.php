@@ -112,6 +112,12 @@
             .fixed-width-addon {
                 width: 125px;
             }
+
+            .btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.3em;
+            }
         </style>
         <script>
             <?php include '/var/www/phpincludes/rooms/formhandler.js'; ?>
