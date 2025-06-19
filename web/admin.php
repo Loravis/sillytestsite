@@ -28,7 +28,9 @@
     if ($_POST && isset($_POST['delete'])) {
         $sql = "DELETE FROM roomlist WHERE roomnr=" . intval($_POST['roomnr']) . ";";
         $result = mysqli_query($conn, $sql);
-        // TODO: Fix result being unused
+        if (!$result) {
+            $error = "Löschen fehlgeschlagen.";
+        }
     }
 
     // Handle room addition
