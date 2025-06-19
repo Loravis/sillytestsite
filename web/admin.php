@@ -28,7 +28,7 @@
     if ($_POST && isset($_POST['delete'])) {
         $stmt = $conn->prepare("DELETE FROM roomlist WHERE roomnr=?;");
         try {
-            $roomnr = filter_input(INPUT_POST, 'roomnr', FILTER_VALIDATE_INT);
+            $roomnr = $_POST['roomnr'];
             $stmt->bind_param("i", $_POST['roomnr']);
             $stmt->execute();
         } catch (mysqli_sql_exception $e) {
@@ -41,9 +41,9 @@
         $stmt = $conn->prepare("INSERT INTO roomlist (roomnr, floor, capacity) VALUES (?, ?, ?)");
 
         try {
-            $roomnr = filter_input(INPUT_POST, 'add_new_roomnr', FILTER_VALIDATE_INT);
-            $floor = filter_input(INPUT_POST, 'add_new_floor', FILTER_VALIDATE_INT);
-            $capacity = filter_input(INPUT_POST, 'add_new_capacity', FILTER_VALIDATE_INT);
+            $roomnr = $_POST['add_new_roomnr'];
+            $floor = $_POST['add_new_floor'];
+            $capacity = $_POST['add_new_capacity'];
 
             $stmt->bind_param("iii", $roomnr, $floor, $capacity);
             $stmt->execute();
@@ -61,14 +61,15 @@
 
         if ($stmt) {
             try {
-                $roomnr = filter_input(INPUT_POST, 'add_new_roomnr', FILTER_VALIDATE_INT);
-                $floor = filter_input(INPUT_POST, 'add_new_floor', FILTER_VALIDATE_INT);
-                $capacity = filter_input(INPUT_POST, 'add_new_capacity', FILTER_VALIDATE_INT);
-                $old_roomnr = filter_input(INPUT_POST, 'edit_old_roomnr', FILTER_VALIDATE_INT);
+                $roomnr = $_POST['edit_new_roomnr'];
+                $floor = $_POST['edit_new_floor'];
+                $capacity = $_POST['edit_new_capacity'];
+                $old_roomnr = $_POST['edit_old_roomnr'];
 
                 $stmt->bind_param("iiii", $roomnr, $floor, $capacity, $old_roomnr);
                 $stmt->execute();
             } catch (mysqli_sql_exception $e) {
+                error_log($e->getMessage());
                 $error = sprintf(
                     "Ein Raum mit der Raumnummer %d existiert bereits. Der neue Raum wurde nicht hinzugefügt.",
                     $_POST['edit_new_roomnr']
