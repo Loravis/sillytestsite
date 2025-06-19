@@ -89,5 +89,8 @@ function resetForm(form_function) {
     form[form_function + "_new_roomnr"].classList.remove("border-danger");
     form[form_function + "_new_floor"].classList.remove("border-danger");
     form[form_function + "_new_capacity"].classList.remove("border-danger");
+    form[form_function + "_new_roomnr"].value = "";
+    form[form_function + "_new_floor"].value = "";
+    form[form_function + "_new_capacity"].value = "";
     document.getElementById(form_function + "_new_room_error").innerHTML = "";
 }

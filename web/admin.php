@@ -58,6 +58,7 @@
         </style>
         <script>
             <?php echo file_get_contents('/var/www/phpincludes/rooms/formhandler.js'); ?>
+            <?php echo file_get_contents('/var/www/phpincludes/rooms/tablebuttonhandler.js'); ?>
         </script>
     </head>
 
