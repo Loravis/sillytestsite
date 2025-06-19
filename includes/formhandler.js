@@ -29,6 +29,26 @@ function validateAddRoomForm() {
     return true;
 }
 
+function validateEditRoomForm() {
+    let form = document.forms["edit_new_form"];
+    let roomnr = form["edit_new_roomnr"].value;
+    let floor = form["edit_new_floor"].value;
+    let capacity = form["edit_new_capacity"].value;
+    
+    // Check if any required fields were left empty
+    let missing = false;
+    missing = setDangerBorder(form, "edit_new_roomnr", roomnr == "");
+    missing = setDangerBorder(form, "edit_new_floor", floor == "");
+    missing = setDangerBorder(form, "edit_new_capacity", capacity == "");
+
+    if (missing) {
+        document.getElementById("edit_new_room_error").innerHTML = "Sie haben noch nicht alle erforderlichen Felder ausgefüllt!";
+        return false;
+    }
+
+    return true;
+}
+
 function resetForm() {
     let form = document.forms["add_new_form"];
     form["add_new_roomnr"].classList.remove("border-danger");

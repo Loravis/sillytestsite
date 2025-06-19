@@ -1,0 +1,35 @@
+<!--Modal for adding new rooms to the list-->
+
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Raum Hinzufügen</h1>
+            <button type="button" onclick="resetForm()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form method="post" name="add_new_form" onsubmit="return validateAddRoomForm()">
+            <div class="modal-body">
+                <p id="add_new_room_error" class="text-danger"></p>
+                <div class="input-group mb-3" name="add_new_roomnr_group">
+                    <span class="input-group-text fixed-width-addon" id="basic-addon1">Raumnummer</span>
+                    <input type="text" class="form-control" name="add_new_roomnr" placeholder="Geben Sie die Raumnummer an" aria-label="Raumnummer" aria-describedby="basic-addon1">
+                </div>
+
+                <div class="input-group mb-3" name="add_new_floor_group">
+                    <span class="input-group-text fixed-width-addon" id="basic-addon1">Etage</span>
+                    <input type="text" class="form-control" name="add_new_floor" placeholder="Geben Sie die Etage an" aria-label="Etage" aria-describedby="basic-addon1">
+                </div>
+
+                <div class="input-group mb-3" name="add_new_capacity_group">
+                    <span class="input-group-text fixed-width-addon" id="basic-addon1">Kapazität</span>
+                    <input type="text" class="form-control" name="add_new_capacity" placeholder="Geben Sie die Kapazität an" aria-label="Raumkapazität" aria-describedby="basic-addon1">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="resetForm()" class="btn btn-danger" data-bs-dismiss="modal">Abbrechen</button>
+                <button type="submit" name="save_add_room" class="btn btn-success">Speichern</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
