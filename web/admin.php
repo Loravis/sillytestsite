@@ -5,8 +5,14 @@
     require "loginhandler.php";
     require "sql_config.php";
 
-    // Handle login
+    // Handle errors
     $error = '';
+    if (isset($_SESSION['error'])) {
+        $error = $_SESSION['error'];
+        unset($_SESSION['error']);
+    }
+
+    // Handle login
     if ($_POST && isset($_POST['login'])) {
         $username = $_POST['username'] ?? '';
         $password = $_POST['password'] ?? '';
@@ -15,13 +21,15 @@
             header('Location: admin.php');
             exit;
         } else {
-            $error = 'Invalid username or password';
+            $_SESSION['error'] = 'Invalid username or password';
         }
     }
 
     // Handle logout
     if ($_POST && isset($_POST['logout'])) {
         logout();
+        header("Location: admin.php");
+        exit;
     }
 
     // Handle room deletion
@@ -31,8 +39,12 @@
             $roomnr = $_POST['roomnr'];
             $stmt->bind_param("i", $_POST['roomnr']);
             $stmt->execute();
+            header("Location: admin.php");
+            exit;
         } catch (mysqli_sql_exception $e) {
-            $error = "Löschen fehlgeschlagen.";
+            $_SESSION['error'] = "Löschen fehlgeschlagen.";
+            header("Location: admin.php");
+            exit;
         }
     }
 
@@ -47,11 +59,15 @@
 
             $stmt->bind_param("iii", $roomnr, $floor, $capacity);
             $stmt->execute();
+            header("Location: admin.php");
+            exit;
         } catch (mysqli_sql_exception $e) {
-            $error = sprintf(
+            $_SESSION['error'] = sprintf(
                 "Ein Raum mit der Raumnummer %d existiert bereits. Der neue Raum wurde nicht hinzugefügt.",
                 $_POST['add_new_roomnr']
             );
+            header("Location: admin.php");
+            exit;
         }
     }
 
@@ -68,17 +84,20 @@
 
                 $stmt->bind_param("iiii", $roomnr, $floor, $capacity, $old_roomnr);
                 $stmt->execute();
+                header("Location: admin.php");
+                exit;
             } catch (mysqli_sql_exception $e) {
-                $error = sprintf(
-                    "Ein Raum mit der Raumnummer %d existiert bereits. Der neue Raum wurde nicht hinzugefügt.",
+                $_SESSION['error'] = sprintf(
+                    "Bearbeitung fehlgeschlagen.",
                     $_POST['edit_new_roomnr']
                 );
             }
         } else {
-            $error = sprintf("Ein interner SQL Fehler ist aufgetreten.");
+            $_SESSION['error'] = sprintf("Ein interner SQL Fehler ist aufgetreten.");
         }
+        header("Location: admin.php");
+        exit;
     }
-
 ?>
 
 <!DOCTYPE html>
