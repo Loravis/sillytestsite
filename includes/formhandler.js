@@ -84,10 +84,10 @@ function validateEditRoomForm() {
     return true;
 }
 
-function resetForm() {
-    let form = document.forms["add_new_form"];
-    form["add_new_roomnr"].classList.remove("border-danger");
-    form["add_new_floor"].classList.remove("border-danger");
-    form["add_new_capacity"].classList.remove("border-danger");
-    document.getElementById("add_new_room_error").innerHTML = "";
+function resetForm(form_function) {
+    let form = document.forms[form_function + "_new_form"];
+    form[form_function + "_new_roomnr"].classList.remove("border-danger");
+    form[form_function + "_new_floor"].classList.remove("border-danger");
+    form[form_function + "_new_capacity"].classList.remove("border-danger");
+    document.getElementById(form_function + "_new_room_error").innerHTML = "";
 }
