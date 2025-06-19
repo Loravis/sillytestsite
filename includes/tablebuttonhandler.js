@@ -8,5 +8,6 @@ function setFormValues(button) {
     edit_form["edit_new_roomnr"].value = roomnr;
     edit_form["edit_new_floor"].value = floor;
     edit_form["edit_new_capacity"].value = capacity;
+    edit_form["edit_old_roomnr"].value = roomnr;
     return false;
 }

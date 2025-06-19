@@ -10,6 +10,7 @@
         <form method="post" name="edit_new_form" onsubmit="return validateEditRoomForm()">
             <div class="modal-body">
                 <p id="edit_new_room_error" class="text-danger"></p>
+                <input type="hidden" name="edit_old_roomnr"/>
                 <div class="input-group mb-3" name="edit_new_roomnr_group">
                     <span class="input-group-text fixed-width-addon" id="basic-addon1">Raumnummer</span>
                     <input type="text" class="form-control" name="edit_new_roomnr" placeholder="Geben Sie die Raumnummer an" aria-label="Raumnummer" aria-describedby="basic-addon1">

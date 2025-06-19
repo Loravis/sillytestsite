@@ -47,8 +47,27 @@
             }
         } else {
             $error = sprintf("Ein interner SQL Fehler ist aufgetreten. Bitte kontaktieren Sie ihren Systemadministrator.");
+        }
     }
-}
+
+    // Handle room edit
+    if ($_POST && isset($_POST['save_edit_room'])) {
+        $stmt = $conn->prepare("UPDATE roomlist SET roomnr = ?, floor = ?, capacity = ? WHERE roomnr = ?");
+
+        if ($stmt) {
+            try {
+                $stmt->bind_param("iiii", $_POST['edit_new_roomnr'], $_POST['edit_new_floor'], $_POST['edit_new_capacity'], $_POST['edit_old_roomnr']);
+                $stmt->execute();
+            } catch (mysqli_sql_exception $e) {
+                $error = sprintf(
+                    "Ein Raum mit der Raumnummer %d existiert bereits. Der neue Raum wurde nicht hinzugefügt.",
+                    $_POST['edit_new_roomnr']
+                );
+            }
+        } else {
+            $error = sprintf("Ein interner SQL Fehler ist aufgetreten. Bitte kontaktieren Sie ihren Systemadministrator.");
+        }
+    }
 
 ?>
 
