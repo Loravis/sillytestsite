@@ -10,18 +10,24 @@
         require 'env.php';
         require 'sql_config.php';
 
-        $sql = "SELECT * FROM admins WHERE username = \"" . $username . "\" AND passwd = \"" . $password . "\";";
+        $stmt = $conn->prepare("SELECT * FROM admins WHERE username = ? AND passwd = ?;");
+        try {
+            $stmt->bind_param("ss", $username, $password);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $assoc = $result->fetch_assoc();
 
-        $result = mysqli_query($conn, $sql);
+            if ($assoc) {
+                $_SESSION[LOGGEDIN] = true;
+                return true;
+            } 
 
-        $assoc = mysqli_fetch_assoc($result);
+            return false;
 
-        if ($assoc) {
-            $_SESSION[LOGGEDIN] = true;
-            return true;
-        } 
-
-        return false;
+        } catch (mysqli_sql_exception $ex) {
+            return false;
+        }
+        
     }
 
     function logout() {

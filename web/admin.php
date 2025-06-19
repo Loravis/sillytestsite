@@ -2,7 +2,7 @@
     session_start();
     set_include_path('/var/www/phpincludes/rooms');
 
-    require_once "loginhandler.php";
+    require "loginhandler.php";
     require "sql_config.php";
 
     // Handle login
@@ -26,9 +26,12 @@
 
     // Handle room deletion
     if ($_POST && isset($_POST['delete'])) {
-        $sql = "DELETE FROM roomlist WHERE roomnr=" . intval($_POST['roomnr']) . ";";
-        $result = mysqli_query($conn, $sql);
-        if (!$result) {
+        $stmt = $conn->prepare("DELETE FROM roomlist WHERE roomnr=?;");
+        try {
+            $roomnr = filter_input(INPUT_POST, 'roomnr', FILTER_VALIDATE_INT);
+            $stmt->bind_param("i", $_POST['roomnr']);
+            $stmt->execute();
+        } catch (mysqli_sql_exception $e) {
             $error = "Löschen fehlgeschlagen.";
         }
     }
@@ -37,18 +40,18 @@
     if ($_POST && isset($_POST['save_add_room'])) {
         $stmt = $conn->prepare("INSERT INTO roomlist (roomnr, floor, capacity) VALUES (?, ?, ?)");
 
-        if ($stmt) {
-            try {
-                $stmt->bind_param("iii", $_POST['add_new_roomnr'], $_POST['add_new_floor'], $_POST['add_new_capacity']);
-                $stmt->execute();
-            } catch (mysqli_sql_exception $e) {
-                $error = sprintf(
-                    "Ein Raum mit der Raumnummer %d existiert bereits. Der neue Raum wurde nicht hinzugefügt.",
-                    $_POST['add_new_roomnr']
-                );
-            }
-        } else {
-            $error = sprintf("Ein interner SQL Fehler ist aufgetreten. Bitte kontaktieren Sie ihren Systemadministrator.");
+        try {
+            $roomnr = filter_input(INPUT_POST, 'add_new_roomnr', FILTER_VALIDATE_INT);
+            $floor = filter_input(INPUT_POST, 'add_new_floor', FILTER_VALIDATE_INT);
+            $capacity = filter_input(INPUT_POST, 'add_new_capacity', FILTER_VALIDATE_INT);
+
+            $stmt->bind_param("iii", $roomnr, $floor, $capacity);
+            $stmt->execute();
+        } catch (mysqli_sql_exception $e) {
+            $error = sprintf(
+                "Ein Raum mit der Raumnummer %d existiert bereits. Der neue Raum wurde nicht hinzugefügt.",
+                $_POST['add_new_roomnr']
+            );
         }
     }
 
@@ -58,7 +61,12 @@
 
         if ($stmt) {
             try {
-                $stmt->bind_param("iiii", $_POST['edit_new_roomnr'], $_POST['edit_new_floor'], $_POST['edit_new_capacity'], $_POST['edit_old_roomnr']);
+                $roomnr = filter_input(INPUT_POST, 'add_new_roomnr', FILTER_VALIDATE_INT);
+                $floor = filter_input(INPUT_POST, 'add_new_floor', FILTER_VALIDATE_INT);
+                $capacity = filter_input(INPUT_POST, 'add_new_capacity', FILTER_VALIDATE_INT);
+                $old_roomnr = filter_input(INPUT_POST, 'edit_old_roomnr', FILTER_VALIDATE_INT);
+
+                $stmt->bind_param("iiii", $roomnr, $floor, $capacity, $old_roomnr);
                 $stmt->execute();
             } catch (mysqli_sql_exception $e) {
                 $error = sprintf(
@@ -67,7 +75,7 @@
                 );
             }
         } else {
-            $error = sprintf("Ein interner SQL Fehler ist aufgetreten. Bitte kontaktieren Sie ihren Systemadministrator.");
+            $error = sprintf("Ein interner SQL Fehler ist aufgetreten.");
         }
     }
 
@@ -81,15 +89,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
-        <?php set_include_path('/var/www/phpincludes/rooms'); ?>
         <style>
             .fixed-width-addon {
                 width: 125px;
             }
         </style>
         <script>
-            <?php echo file_get_contents('/var/www/phpincludes/rooms/formhandler.js'); ?>
-            <?php echo file_get_contents('/var/www/phpincludes/rooms/tablebuttonhandler.js'); ?>
+            <?php include '/var/www/phpincludes/rooms/formhandler.js'; ?>
+            <?php include '/var/www/phpincludes/rooms/tablebuttonhandler.js'; ?>
         </script>
     </head>
 
@@ -130,8 +137,8 @@
                 </div>
             </div>
         <?php else: ?>
-            <?php echo file_get_contents('/var/www/phpincludes/rooms/add_modal.html'); ?>
-            <?php echo file_get_contents('/var/www/phpincludes/rooms/edit_modal.html'); ?>
+            <?php include '/var/www/phpincludes/rooms/add_modal.html'; ?>
+            <?php include '/var/www/phpincludes/rooms/edit_modal.html'; ?>
 
             <div class="container mt-5">
                 <div class="row justify-content-center">
