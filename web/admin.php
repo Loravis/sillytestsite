@@ -92,7 +92,15 @@
                 }
 
                 return true;
-            } 
+            }
+            
+            function resetForm() {
+                let form = document.forms["add_new_form"];
+                form["add_new_roomnr"].classList.remove("border-danger");
+                form["add_new_floor"].classList.remove("border-danger");
+                form["add_new_capacity"].classList.remove("border-danger");
+                document.getElementById("add_new_room_error").innerHTML = "";
+            }
         </script>
     </head>
 
@@ -139,7 +147,7 @@
                     <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">Raum Hinzufügen</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" onclick="resetForm()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form method="post" name="add_new_form" onsubmit="return validateAddRoomForm()">
                         <div class="modal-body">
@@ -160,7 +168,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Abbrechen</button>
+                            <button type="button" onclick="resetForm()" class="btn btn-danger" data-bs-dismiss="modal">Abbrechen</button>
                             <button type="submit" name="save_add_room" class="btn btn-success">Speichern</button>
                         </div>
                     </form>
