@@ -34,8 +34,12 @@
 
     // Handle room addition
     if ($_POST && isset($_POST['save_add_room'])) {
-        $sql = sprintf("INSERT INTO roomlist (roomnr, floor, capacity) VALUES (%d, %d, %d);", $_POST['add_new_roomnr'], $_POST['add_new_floor'], $_POST['add_new_capacity']);
-        $result = mysqli_query($conn, $sql);
+        try {
+            $sql = sprintf("INSERT INTO roomlist (roomnr, floor, capacity) VALUES (%d, %d, %d);", $_POST['add_new_roomnr'], $_POST['add_new_floor'], $_POST['add_new_capacity']);
+            $result = mysqli_query($conn, $sql);
+        } catch (mysqli_sql_exception) {
+            $error = sprintf("Ein Raum mit der Raumnummer %d existiert bereits. Der neue Raum wurde nicht hinzugefügt.", $_POST['add_new_roomnr']);
+        }
     }
 ?>
 
@@ -53,6 +57,43 @@
                 width: 125px;
             }
         </style>
+        <script>
+            function validateAddRoomForm() {
+                let form = document.forms["add_new_form"];
+                let roomnr = form["add_new_roomnr"].value;
+                let floor = form["add_new_floor"].value;
+                let capacity = form["add_new_capacity"].value;
+                
+                let missing = false;
+                if (roomnr == "") {
+                    form["add_new_roomnr"].classList.add("border-danger");
+                    missing = true;
+                } else {
+                    form["add_new_roomnr"].classList.remove("border-danger");
+                }
+
+                if (floor == "") {
+                    form["add_new_floor"].classList.add("border-danger");
+                    missing = true;
+                } else {
+                    form["add_new_floor"].classList.remove("border-danger");
+                }
+
+                if (capacity == "") {
+                    form["add_new_capacity"].classList.add("border-danger");
+                    missing = true;
+                } else {
+                    form["add_new_capacity"].classList.remove("border-danger");
+                }
+
+                if (missing) {
+                    document.getElementById("add_new_room_error").innerHTML = "Sie haben noch nicht alle erforderlichen Felder ausgefüllt!";
+                    return false;
+                }
+
+                return true;
+            } 
+        </script>
     </head>
 
     <body>
@@ -69,8 +110,8 @@
                             <div class="card-body">
                                 <h2 class="card-title mb-4 text-center">Admin Login</h2>
 
-                                <?php if ($error): ?>
-                                    <div class="alert alert-danger"><?php echo $error; ?></div>
+                                <?php if (!empty($error)): ?>
+                                    <div class="alert alert-danger"><p><?= $error ?></p></div>
                                 <?php endif; ?>
                                 
                                 <form method="POST">
@@ -100,21 +141,22 @@
                         <h1 class="modal-title fs-5" id="exampleModalLabel">Raum Hinzufügen</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form method="post">
+                    <form method="post" name="add_new_form" onsubmit="return validateAddRoomForm()">
                         <div class="modal-body">
-                            <div class="input-group mb-3">
+                            <p id="add_new_room_error" class="text-danger"></p>
+                            <div class="input-group mb-3" name="add_new_roomnr_group">
                                 <span class="input-group-text fixed-width-addon" id="basic-addon1">Raumnummer</span>
-                                <input type="text" class="form-control" name="add_new_roomnr" placeholder="Geben Sie die Raumnummer an" aria-label="Recipient’s username" aria-describedby="basic-addon1">
+                                <input type="text" class="form-control" name="add_new_roomnr" placeholder="Geben Sie die Raumnummer an" aria-label="Raumnummer" aria-describedby="basic-addon1">
                             </div>
 
-                            <div class="input-group mb-3">
+                            <div class="input-group mb-3" name="add_new_floor_group">
                                 <span class="input-group-text fixed-width-addon" id="basic-addon1">Etage</span>
-                                <input type="text" class="form-control" name="add_new_floor" placeholder="Geben Sie die Etage an" aria-label="Recipient’s username" aria-describedby="basic-addon1">
+                                <input type="text" class="form-control" name="add_new_floor" placeholder="Geben Sie die Etage an" aria-label="Etage" aria-describedby="basic-addon1">
                             </div>
 
-                            <div class="input-group mb-3">
+                            <div class="input-group mb-3" name="add_new_capacity_group">
                                 <span class="input-group-text fixed-width-addon" id="basic-addon1">Kapazität</span>
-                                <input type="text" class="form-control" name="add_new_capacity" placeholder="Geben Sie die Kapazität an" aria-label="Recipient’s username" aria-describedby="basic-addon1">
+                                <input type="text" class="form-control" name="add_new_capacity" placeholder="Geben Sie die Kapazität an" aria-label="Raumkapazität" aria-describedby="basic-addon1">
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -132,6 +174,11 @@
                         <div class="card shadow">
                             <div class="card-body">
                                 <h2 class="card-title mb-4 text-center">Raumliste</h2>
+                                <?php if (!empty($error)): ?>
+                                    <div class="alert alert-warning d-flex align-items-center justify-content-center" role="alert" style="min-height: 60px; padding: 0 1rem;">
+                                        <p class="mb-0 text-center w-100"><?= $error ?></p>
+                                    </div>
+                                <?php endif; ?>
                                 <div class="table-responsive">
                                     <?php 
                                         include 'roomstable.php';
